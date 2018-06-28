@@ -25,6 +25,7 @@ module.exports = function(){
   router.post('/recommend/add',Recommend.addRecommendItem)
   router.post('/recommend/delete', App.hasBody, Recommend.deleteRecommendItem)
   router.post('/recommend/update', App.hasBody, Recommend.updateRecommendItem)
+  router.post('/recommend/search', Recommend.filterRecommendItem)
 
   // 热门数据
   router.get('/hot/all',Hot.getAllHotItem)
