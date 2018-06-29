@@ -41,9 +41,10 @@ exports.findAllItem = async (pagenum, pagesize) => {
 }
 // 搜索内容
 exports.filterItem = async (text) => {
-
+    console.log('text',text)
+    var reg = new RegExp(text,'i');
     var query = Recommend.find({
-        'title': /text/
+        'title': {$regex : reg}
     })
     var res = []
     await query.exec(function (err, item) {
