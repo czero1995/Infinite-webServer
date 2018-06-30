@@ -57,32 +57,29 @@ exports.signup = async (ctx, next) => {
 // 更新用户信息操作
 exports.update = async (ctx, next) => {
   var body = ctx.request.body
-  var accessToken = body.accessToken
-  // var user = yield User.findOne({
   var user = await User.findOne({
-    accessToken:accessToken
+    phoneNumber:xss(ctx.request.body.phoneNumber)
   }).exec()
-  var fields = 'avatar,gender,age,nickname,breed,correct'.split(',')
-
-  fields.forEach(function(field) {
-    if (body[field]) {
-      user[field] = xss(body[field])
+  if (!user) {
+    ctx.body = {
+      success: false,
+      data:'用户不存在'
     }
-  })
+  }else{
 
-  user = await user.save()
-
-  ctx.body = {
-    success: true,
-    data: {
-      nickname: user.nickname,
-      accessToken: user.accessToken,
-      avatar: user.avatar,
-      age: user.age,
-      breed: user.breed,
-      gender: user.gender,
-      _id: user._id,
-      correct:user.correct
+    var fields = 'avatar,gender,age,nickname,breed,correct,passwd,'.split(',')
+  
+    fields.forEach(function(field) {
+      if (body[field]) {
+        user[field] = xss(body[field])
+      }
+    })
+  
+    user = await user.save()
+  
+    ctx.body = {
+      success: true,
+      data:'修改成功'
     }
   }
 }
@@ -117,6 +114,8 @@ exports.login = async (ctx, next) => {
   var user = await User.findOne({
 	  phoneNumber: phoneNumber
   }).exec()
+  console.log('passwd',passwd)
+  console.log('userpasswd',user.passwd)
   if (!user) {
     ctx.body = {
       success: false,
@@ -126,7 +125,7 @@ exports.login = async (ctx, next) => {
     if(passwd == user.passwd){
       ctx.body = {
         success: true,
-        data:'登录成功'
+        data:user
       }
     }else{
       ctx.body = {

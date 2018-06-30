@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Recommend = mongoose.model('Recommend')
 const uuid = require('uuid')
 import recommendHelper from '../../dbhelper/recommendHelper'
+import HotHelper from '../../dbhelper/hotHelper'
 
 // 添加新内容
 exports.addRecommendItem = async (ctx, next) => {
@@ -61,13 +62,14 @@ exports.getAllRecommendItem = async (ctx, next) => {
 exports.filterRecommendItem = async (ctx, next) => {
     console.log('text', ctx.request.body.text)
     let text = ctx.request.body.text
-    var data = await recommendHelper.filterItem(text)
-    console.log('搜素内容data', data)
+    var dataRecommend = await recommendHelper.filterItem(text)
+    var dataHot = await HotHelper.filterItem(text)
+    var allData = [...dataRecommend, ...dataHot]
+    console.log('搜素内容data', allData)
     ctx.body = {
         success: true,
-        data: data
+        data: allData
     }
-
 }
 
 // 获取内容详情

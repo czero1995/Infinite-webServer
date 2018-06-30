@@ -13,7 +13,7 @@ module.exports = function(){
   router.post('/admin/user', App.hasBody, Admin.user)
   // 用户
   router.post('/signup', App.hasBody, User.signup)
-  router.post('/update', App.hasBody, App.hasToken, User.update)
+  router.post('/update', App.hasBody, User.update)
   router.get('/user/users',User.users)
   router.post('/user/delete', App.hasBody, User.deleteUser)
   router.post('/user/login', App.hasBody, User.login)
