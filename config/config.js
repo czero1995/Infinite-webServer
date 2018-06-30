@@ -5,7 +5,7 @@ module.exports = {
         Bucket: "infinite",
         Port: 9000,
         UptokenUrl: "infinite",
-        Domain: "payl8xthx.bkt.clouddn.com/"
+        Domain: "http://payl8xthx.bkt.clouddn.com/"
     },
     dbConnect: 'mongodb://localhost/infinite'
 }
