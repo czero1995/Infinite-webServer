@@ -51,7 +51,7 @@ const router = require('./config/router')()
 
 app.use(cors({
   origin: function (ctx) {
-    if (ctx.origin == 'http://127.0.0.1:4000' || ctx.origin == 'http://47.98.240.154') {
+    if (ctx.origin == 'http://127.0.0.1:4000' || ctx.origin == 'http://infinite.czero.cn') {
       return "*"; // 允许来自所有域名请求
     }
     console.log('进入请求', ctx)
