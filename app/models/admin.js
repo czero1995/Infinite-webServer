@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema;
 
 var AdminSchema = new Schema({
-	phoneNumber: {
+  phoneNumber: {
     unique: true,
     type: String
   },
@@ -16,6 +16,7 @@ var AdminSchema = new Schema({
   nickname: String,
   gender: String,
   breed: String,
+  passwd: String,
   age: String,
   avatar: String,
   meta: {
@@ -31,7 +32,7 @@ var AdminSchema = new Schema({
 })
 
 // Defines a pre hook for the document.
-AdminSchema.pre('save', function(next) {
+AdminSchema.pre('save', function (next) {
   if (this.isNew) {
     this.meta.createAt = this.meta.updateAt = Date.now()
   }
