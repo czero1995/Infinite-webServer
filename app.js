@@ -5,25 +5,25 @@ const config = require('./config/config')
 
 /*mongoose连接数据库*/
 mongoose.Promise = require('bluebird')
-mongoose.connect(config.dbConnect,{useMongoClient: true})
+mongoose.connect(config.dbConnect, { useMongoClient: true })
 
 /*获取数据库表对应的js对象所在的路径*/
 const models_path = path.join(__dirname, './app/models')
 
 /*用递归的形式，读取models文件夹下的js模型文件，并require*/
-var walk = function(modelPath) {
-  fs.readdirSync(modelPath).forEach(function(file) {
-      var filePath = path.join(modelPath, '/' + file)
-      var stat = fs.statSync(filePath)
-      if (stat.isFile()) {
-        if (/(.*)\.(js|coffee)/.test(file)) {
-          require(filePath)
-        }
+var walk = function (modelPath) {
+  fs.readdirSync(modelPath).forEach(function (file) {
+    var filePath = path.join(modelPath, '/' + file)
+    var stat = fs.statSync(filePath)
+    if (stat.isFile()) {
+      if (/(.*)\.(js|coffee)/.test(file)) {
+        require(filePath)
       }
-      else if (stat.isDirectory()) {
-        walk(filePath)
-      }
-    })
+    }
+    else if (stat.isDirectory()) {
+      walk(filePath)
+    }
+  })
 }
 walk(models_path)
 
@@ -40,9 +40,9 @@ app.use(logger())
 app.use(session(app))
 app.use(bodyParser())
 
-app.use(function *(next){
-  console.log('请求的完整地址',this.href)
-  console.log('请求过来的方法',this.method)
+app.use(function* (next) {
+  console.log('请求的完整地址', this.href)
+  console.log('请求过来的方法', this.method)
   yield next
 })
 
@@ -50,26 +50,27 @@ app.use(function *(next){
 const router = require('./config/router')()
 
 app.use(cors({
-    origin: function (ctx) {
-        if (ctx.url === '/test') {
-            return "*"; // 允许来自所有域名请求
-        }
-      // return 'http://localhost:8080'; // 这样就能只允许 http://localhost:8080 这个域名的请求了z
-    },
-    maxAge: 5,
-    credentials: true,
-    allowMethods: ['GET', 'POST', 'DELETE'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept','application/json;'],
+  origin: function (ctx) {
+    if (ctx.origin == 'http://127.0.0.1:4000' || ctx.origin == 'http://47.98.240.154') {
+      return "*"; // 允许来自所有域名请求
+    }
+    console.log('进入请求', ctx)
+    // return 'http://localhost:8080'; // 这样就能只允许 http://localhost:8080 这个域名的请求了z
+  },
+  maxAge: 5,
+  credentials: true,
+  allowMethods: ['GET', 'POST', 'DELETE'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'application/json;'],
 }))
 
 
 router.post('/', async function (ctx) {
-    ctx.body = ''
+  ctx.body = ''
 });
 
 app.use(router.routes())
-   .use(router.allowedMethods())
-  
+  .use(router.allowedMethods())
+
 
 
 
