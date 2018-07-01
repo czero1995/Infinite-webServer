@@ -51,10 +51,11 @@ const router = require('./config/router')()
 
 app.use(cors({
   origin: function (ctx) {
-    if (ctx.origin == 'http://127.0.0.1:4000' || ctx.origin == 'http://infinite.czero.cn') {
+    if (ctx.header.origin == 'http://127.0.0.1:4000' || ctx.header.origin == 'http://infinite.czero.cn') {
+      console.log('处理跨域请求成功')
       return "*"; // 允许来自所有域名请求
     }
-    console.log('进入请求', ctx)
+    console.log('进入请求aaa', ctx.header.origin)
     // return 'http://localhost:8080'; // 这样就能只允许 http://localhost:8080 这个域名的请求了z
   },
   maxAge: 5,
